@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+
+class Player {
+private:
+    std::string Playername;
+    int playernum;
+    float grandtotal;
+    Player* nextPlayer; // Pointer to the next player in the linked list
+
+public:
+    // Constructor declaration
+    Player(std::string name, int num, float total) : Playername(name), playernum(num), grandtotal(total), nextPlayer(nullptr) {}
+
+    // Setter function for nextPlayer
+    void setNextPlayer(Player* next) { nextPlayer = next; }
+
+    // Getter functions
+    std::string getName() const { return Playername; }
+    int getNumber() const { return playernum; }
+    float getTotal() const { return grandtotal; }
+    Player* getNextPlayer() const { return nextPlayer; }
+};
+
+int main() {
+    Player* head = nullptr; // Head pointer of the linked list
+
+    // Input data for each player and add them to the linked list
+    for (int i = 0; i < 4; ++i) {
+        std::string name;
+        std::cout << "Enter name for Player " << i+1 << ": ";
+        std::getline(std::cin >> std::ws, name); // Read input including whitespaces
+        Player* newPlayer = new Player(name, i+1, 0); // Player number starts from 1
+        newPlayer->setNextPlayer(head);
+        head = newPlayer;
+    }
+
+    // Displaying player information
+    std::cout << "\nPlayers Information:" << std::endl;
+    Player* current = head;
+    while (current != nullptr) {
+        std::cout << "Player " << current->getNumber() << ": ";
+        std::cout << "Name: " << current->getName() << ", ";
+        std::cout << "Total: " << current->getTotal() << std::endl;
+        current = current->getNextPlayer();
+    }
+
+    // Freeing memory allocated for players
+    current = head;
+    while (current != nullptr) {
+        Player* temp = current;
+        current = current->getNextPlayer();
+        delete temp;
+    }
+
+    return 0;
+}
